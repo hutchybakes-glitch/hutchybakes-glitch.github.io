@@ -22,6 +22,15 @@ window.PORTFOLIO = {
       cv: "",                                // e.g. "cv/Sam-Hutchinson-CV.pdf" (put the PDF in the cv folder)
     },
     // Extra skills to show in the toolkit strip, alongside the tools listed on projects
+    // Live panel in the opening section: current rain at these places, fetched in the browser from Open-Meteo
+    live: {
+      title: "Right now in the North West",
+      places: [
+        { name: "Carlisle", lat: 54.89, lon: -2.93 }, { name: "Kendal", lat: 54.33, lon: -2.75 },
+        { name: "Lancaster", lat: 54.05, lon: -2.80 }, { name: "Preston", lat: 53.76, lon: -2.70 },
+        { name: "Liverpool", lat: 53.41, lon: -2.98 }, { name: "Manchester", lat: 53.48, lon: -2.24 },
+      ],
+    },
     coreSkills: ["Data modelling", "DAX", "Power Query (M)", "Python", "SQL", "Data visualisation", "REST APIs"],
   },
 
@@ -34,12 +43,24 @@ window.PORTFOLIO = {
       featured: true,                             // the featured project gets the large slot at the top
       summary: "Type any North West place or postcode and see the rain that has fallen, the forecast hour by hour, and what is coming over the next few days.",
       image: "images/projects/nw-rainfall-watch.webp",
+      imageLabel: "Rain at a place",
       imageAlt: "NW Rainfall Watch report page for Manchester: a plain-English forecast summary, four headline rain totals, an hour-by-hour chart with chance of rain, day-by-day cards and a zoomed rain map.",
       gallery: [
-        { src: "images/projects/nw-rainfall-watch-region.webp", alt: "Region overview page: a smooth rain map of the North West, regional headline figures, an hourly chart for the region, an area comparison and the wettest places." },
+        { label: "Region overview", src: "images/projects/nw-rainfall-watch-region.webp", alt: "Region overview page: a smooth rain map of the North West, regional headline figures, an hourly chart for the region, an area comparison and the wettest places." },
       ],
       liveUrl: "",                                // paste the Publish to web link here: https://app.powerbi.com/view?r=...
       sourceUrl: "",                              // optional: a GitHub repo for the project
+      // Scheduled refresh times (UK time) set in the Power BI Service; the page shows the last and next update
+      refreshSchedule: ["00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"],
+      // How it is built, left to right (shown as a pipeline in the featured slot and the case study)
+      pipeline: [
+        { step: "Sources", detail: "Environment Agency gauges, Open-Meteo forecast, ONS places" },
+        { step: "Power Query", detail: "Batched API calls, retries, UTC to UK time" },
+        { step: "Model", detail: "Star schema, 207k-row place index, hourly facts" },
+        { step: "DAX", detail: "Search resolution, distance blending, plain-English summary" },
+        { step: "Visuals", detail: "17 Deneb/Vega visuals, smooth maps" },
+        { step: "Service", detail: "Scheduled refresh, published to the web" },
+      ],
       stats: [
         { value: "207k", label: "searchable places and postcodes" },
         { value: "200+", label: "live rain gauges blended" },
@@ -84,6 +105,8 @@ window.PORTFOLIO = {
       gallery: [],
       liveUrl: "",
       sourceUrl: "",
+      refreshSchedule: [],
+      pipeline: [],
       stats: [],
       problem: "The problem it solves, in two or three sentences.",
       built: ["What you built, one point per line."],

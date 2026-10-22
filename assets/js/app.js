@@ -45,18 +45,81 @@
 
   // ---------- featured ----------
   const featured = projects.find(p => p.featured) || projects[0];
+  // Last and next scheduled refresh (UK time) from the project's refreshSchedule, e.g. ["06:00", "09:00"]
+  const refreshStatus = p => {
+    const times = (p.refreshSchedule || []).slice().sort();
+    if (!times.length) return '';
+    const now = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date());
+    const past = times.filter(t => t <= now);
+    const last = past.length ? past[past.length - 1] : times[times.length - 1];
+    const next = times.find(t => t > now) || times[0];
+    const every = times.length > 1 ? Math.round(24 / times.length) : 24;
+    return `<p class="status"><span class="dot" aria-hidden="true"></span><span><strong>Live data</strong> · refreshes every ${every} hours · last scheduled update ${last}${past.length ? '' : ' yesterday'}, next ${next} (UK time)</span></p>`;
+  };
+  // "From API to answer" pipeline
+  const pipeline = p => (p.pipeline && p.pipeline.length) ? `
+    <ol class="pipeline" aria-label="How it is built">${p.pipeline.map((s, i) => `<li><span class="step-n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><strong>${esc(s.step)}</strong><span>${esc(s.detail)}</span></li>`).join('')}</ol>` : '';
+  // Screenshot in a browser-style frame, with tabs when the project has several pages
+  const browser = p => {
+    const pages = [{ label: p.imageLabel || 'Report', src: p.image, alt: p.imageAlt }, ...(p.gallery || []).map(g => ({ label: g.label || 'Page', src: g.src, alt: g.alt }))];
+    return `
+      <div class="browser">
+        <div class="browser-bar">
+          <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          ${pages.length > 1 ? `<div class="tabs" role="tablist" aria-label="Report pages">${pages.map((pg, i) => `<button type="button" role="tab" aria-selected="${i === 0}" aria-controls="pane-${esc(p.id)}" data-src="${esc(pg.src)}" data-alt="${esc(pg.alt)}">${esc(pg.label)}</button>`).join('')}</div>` : `<span class="browser-title">${esc(pages[0].label)}</span>`}
+        </div>
+        <figure class="shot" id="pane-${esc(p.id)}" role="tabpanel"><img src="${esc(pages[0].src)}" alt="${esc(pages[0].alt)}" width="1600" height="894" fetchpriority="high" decoding="async"></figure>
+      </div>`;
+  };
+  document.addEventListener('click', e => {
+    const tab = e.target.closest('.tabs [role="tab"]'); if (!tab) return;
+    const frame = tab.closest('.browser');
+    frame.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected', b === tab));
+    const img = frame.querySelector('img'); img.src = tab.dataset.src; img.alt = tab.dataset.alt;
+  });
+
   if (featured) {
     $('featured').innerHTML = `
       <div class="featured-card">
-        <div class="featured-media">${shot(featured, 'framed', true)}</div>
+        <div class="featured-media">${browser(featured)}</div>
         <div class="featured-text">
           <p class="eyebrow">Featured · ${esc(featured.type)} · ${esc(monthName(featured.date))}</p>
           <h2>${esc(featured.title)}</h2>
           <p class="lede">${esc(featured.summary)}</p>
+          ${refreshStatus(featured)}
           ${featured.stats && featured.stats.length ? `<dl class="stats">${featured.stats.map(s => `<div><dt>${esc(s.label)}</dt><dd>${esc(s.value)}</dd></div>`).join('')}</dl>` : ''}
           <div class="actions">${liveButton(featured, true)}${detailButton(featured, true)}</div>
         </div>
+        ${featured.pipeline && featured.pipeline.length ? `<div class="featured-pipeline"><p class="eyebrow">From API to answer</p>${pipeline(featured)}</div>` : ''}
       </div>`;
+  }
+
+  // ---------- live panel: current rain at a few places, straight from Open-Meteo in the browser ----------
+  const live = profile.live;
+  if (live && live.places && live.places.length) {
+    const box = $('live');
+    const describe = (mm, code) => mm > 0 ? (code >= 80 ? 'Showers' : code >= 51 && code <= 57 ? 'Drizzle' : 'Rain') : code >= 45 && code <= 48 ? 'Fog' : code === 0 ? 'Clear' : code <= 2 ? 'Bright spells' : 'Cloudy';
+    box.innerHTML = `<p class="eyebrow"><span class="dot" aria-hidden="true"></span>Live</p><h2 id="live-title">${esc(live.title)}</h2><p class="live-sub">Fetching current conditions…</p>`;
+    const q = new URLSearchParams({ latitude: live.places.map(p => p.lat).join(','), longitude: live.places.map(p => p.lon).join(','), current: 'precipitation,temperature_2m,weather_code', timezone: 'Europe/London' });
+    fetch(`https://api.open-meteo.com/v1/forecast?${q}`).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(json => {
+      const rows = (Array.isArray(json) ? json : [json]).map((d, i) => ({ name: live.places[i].name, mm: d.current.precipitation, t: d.current.temperature_2m, code: d.current.weather_code, time: d.current.time }));
+      const wet = rows.filter(r => r.mm > 0).length;
+      const at = rows[0] && rows[0].time ? rows[0].time.slice(11, 16) : '';
+      box.innerHTML = `
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Live · ${esc(at)} UK time</p>
+        <h2 id="live-title">${esc(live.title)}</h2>
+        <p class="live-sub">${wet ? `Rain falling in <strong>${wet} of ${rows.length}</strong> places` : `Dry in all ${rows.length} places`}</p>
+        <ul class="live-list">${rows.map(r => `
+          <li class="${r.mm > 0 ? 'wet' : ''}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C12 3 5 11 5 15a7 7 0 0 0 14 0C19 11 12 3 12 3Z"/></svg>
+            <span class="place">${esc(r.name)}</span>
+            <span class="cond">${esc(describe(r.mm, r.code))}${r.mm > 0 ? ` · ${r.mm.toFixed(1)} mm` : ''}</span>
+            <span class="temp">${Math.round(r.t)}°</span>
+          </li>`).join('')}</ul>
+        <p class="live-note">Fetched in your browser just now, from the same forecast service the report uses. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>.</p>`;
+    }).catch(() => {
+      box.innerHTML = `<p class="eyebrow">Live</p><h2 id="live-title">${esc(live.title)}</h2><p class="live-sub">Live conditions are unavailable right now. The report itself refreshes on a schedule.</p>`;
+    });
   }
 
   // ---------- grid ----------
@@ -113,7 +176,9 @@
       <p class="lede">${esc(p.summary)}</p>
       <div class="actions">${liveButton(p)}${p.sourceUrl ? `<a class="btn ghost" href="${esc(p.sourceUrl)}" target="_blank" rel="noopener">Source code ${icon('arrow')}<span class="sr">(opens in a new tab)</span></a>` : ''}</div>
       <div class="gallery">${images.map(im => `<figure class="shot framed"><img src="${esc(im.src)}" alt="${esc(im.alt)}" width="1600" height="894" loading="lazy" decoding="async"></figure>`).join('')}</div>
+      ${refreshStatus(p)}
       ${p.problem ? `<h3>The problem</h3><p>${esc(p.problem)}</p>` : ''}
+      ${p.pipeline && p.pipeline.length ? `<h3>How it is built</h3>${pipeline(p)}` : ''}
       ${p.built && p.built.length ? `<h3>What I built</h3><ul class="points">${p.built.map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
       ${p.techniques && p.techniques.length ? `<h3>Key techniques</h3><ul class="points">${p.techniques.map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
       <div class="detail-cols">
