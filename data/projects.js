@@ -48,7 +48,7 @@ window.PORTFOLIO = {
       gallery: [
         { label: "Region overview", src: "images/projects/nw-rainfall-watch-region.webp", alt: "Region overview page: a smooth rain map of the North West, regional headline figures, an hourly chart for the region, an area comparison and the wettest places." },
       ],
-      liveUrl: "",                                // paste the Publish to web link here: https://app.powerbi.com/view?r=...
+      liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiN2YxZjE4MzktYjkyNC00YWFmLWIyZjUtNTI1NDg3YTcxNmZkIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
       sourceUrl: "",                              // optional: a GitHub repo for the project
       // Scheduled refresh times (UK time) set in the Power BI Service; the page shows the last and next update
       refreshSchedule: ["00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"],
