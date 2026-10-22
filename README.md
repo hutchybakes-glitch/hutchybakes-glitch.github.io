@@ -2,7 +2,7 @@
 
 My portfolio of personal data projects: Power BI reports (and later Python/Streamlit apps), built on public data and published so anyone can open them.
 
-Live site: **https://hutchybakes-glitch.github.io/**
+Live site: **https://hutchybakes-glitch.github.io/hutchybakes.github.io/** (rename the repo to `hutchybakes-glitch.github.io` for the shorter https://hutchybakes-glitch.github.io/)
 
 Plain HTML, CSS and JavaScript. There's no build step, so GitHub Pages serves the files as they are.
 
@@ -71,7 +71,7 @@ First time:
 1. On GitHub (signed in as **hutchybakes-glitch**), create a **public** repository named exactly `hutchybakes-glitch.github.io`. Don't add a README.
 2. In this folder:
    ```
-   git remote add origin https://github.com/hutchybakes-glitch/hutchybakes-glitch.github.io.git
+   git remote add origin https://github.com/hutchybakes-glitch/hutchybakes.github.io.git
    git branch -M main
    git push -u origin main
    ```
