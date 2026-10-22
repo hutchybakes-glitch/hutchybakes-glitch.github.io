@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sam Hutchinson · Data projects</title>
+  <meta name="description" content="Power BI reports and data projects by Sam Hutchinson, Senior Analyst. Built on public data and published to use, not just to look at.">
+  <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B0E13" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Sam Hutchinson · Data projects">
+  <meta property="og:description" content="Power BI reports and data projects built on public data.">
+  <meta property="og:image" content="images/projects/nw-rainfall-watch.webp">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314171F'/%3E%3Cpath d='M32 12C32 12 18 30 18 40a14 14 0 0 0 28 0C46 30 32 12 32 12Z' fill='%233B82F6'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Apply the saved or system theme before first paint (no flash) -->
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#work">Skip to projects</a>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="mark" href="#top" aria-label="Back to top"><span aria-hidden="true">SH</span></a>
+      <nav aria-label="Main">
+        <ul class="nav">
+          <li><a href="#work">Work</a></li>
+          <li><a href="#toolkit">Toolkit</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch between light and dark mode">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap" aria-labelledby="hero-name">
+      <p class="eyebrow" id="hero-role"></p>
+      <h1 id="hero-name"></h1>
+      <p class="positioning" id="hero-positioning"></p>
+      <div class="intro" id="hero-intro"></div>
+      <ul class="links" id="hero-links" aria-label="Contact and profiles"></ul>
+    </section>
+
+    <section class="featured wrap" id="featured" aria-label="Featured project"></section>
+
+    <section class="work wrap" id="work" aria-labelledby="work-title">
+      <div class="section-head">
+        <h2 id="work-title">Projects</h2>
+        <div class="filters" id="filters" role="group" aria-label="Filter projects by type" hidden></div>
+      </div>
+      <ul class="grid" id="grid"></ul>
+    </section>
+
+    <section class="toolkit" id="toolkit" aria-labelledby="toolkit-title">
+      <div class="wrap">
+        <h2 id="toolkit-title">Toolkit</h2>
+        <ul class="tools" id="tools"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="wrap footer-row">
+      <div>
+        <p class="footer-name" id="footer-name"></p>
+        <p class="footer-note">All projects use public data only. Nothing here comes from an employer.</p>
+      </div>
+      <ul class="links small" id="footer-links" aria-label="Contact and profiles"></ul>
+    </div>
+  </footer>
+
+  <dialog class="detail" id="detail" aria-labelledby="detail-title">
+    <div class="detail-inner" id="detail-body"></div>
+  </dialog>
+
+  <noscript><p class="wrap">This page needs JavaScript to list the projects.</p></noscript>
+  <script src="data/projects.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
