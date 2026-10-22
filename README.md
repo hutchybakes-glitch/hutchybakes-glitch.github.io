@@ -2,7 +2,7 @@
 
 My portfolio of personal data projects: Power BI reports (and later Python/Streamlit apps), built on public data and published so anyone can open them.
 
-Live site: **https://hutchybakes.github.io/**
+Live site: **https://hutchybakes-glitch.github.io/**
 
 Plain HTML, CSS and JavaScript. There's no build step, so GitHub Pages serves the files as they are.
 
@@ -68,14 +68,14 @@ Keep the commas: every `{ ... }` in a list ends with `},`. If the page shows "Co
 ## Publishing to GitHub Pages
 
 First time:
-1. On GitHub (signed in as **hutchybakes**), create a **public** repository named exactly `hutchybakes.github.io`. Don't add a README.
+1. On GitHub (signed in as **hutchybakes-glitch**), create a **public** repository named exactly `hutchybakes-glitch.github.io`. Don't add a README.
 2. In this folder:
    ```
-   git remote add origin https://github.com/hutchybakes/hutchybakes.github.io.git
+   git remote add origin https://github.com/hutchybakes-glitch/hutchybakes-glitch.github.io.git
    git branch -M main
    git push -u origin main
    ```
-3. On GitHub, go to **Settings → Pages → Build and deployment**. Set **Source** to *Deploy from a branch*, **Branch** to `main` / `(root)`, then **Save**. After a minute or two the site is live at https://hutchybakes.github.io/.
+3. On GitHub, go to **Settings → Pages → Build and deployment**. Set **Source** to *Deploy from a branch*, **Branch** to `main` / `(root)`, then **Save**. After a minute or two the site is live at https://hutchybakes-glitch.github.io/.
 
 Every update after that: `git add -A`, `git commit -m "Add <project>"`, `git push`. Pages republishes on its own.
 

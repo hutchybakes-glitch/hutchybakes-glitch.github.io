@@ -6,7 +6,7 @@ A static portfolio site for Sam Hutchinson, served by GitHub Pages from the repo
 - `data/projects.js` holds **all content**: `window.PORTFOLIO = { profile, projects }`. It's plain JS, not JSON, so `index.html` also works from `file://`.
 - `index.html` has the layout skeleton only. `assets/js/app.js` renders everything from the data. `assets/css/styles.css` holds the design tokens and components.
 - `images/projects/<id>.webp` is the screenshot for each project, a 16:9 crop of the report page, at least 900 px wide (up to 1600). Make it with `tools/crop_screenshot.py`.
-- `data/nw_place_index.csv.gz` is **read by the NW Rainfall Watch Power BI report at refresh time**, via `raw.githubusercontent.com/hutchybakes/hutchybakes.github.io/main/data/...`. Don't move, rename or delete it.
+- `data/nw_place_index.csv.gz` is **read by the NW Rainfall Watch Power BI report at refresh time**, via `raw.githubusercontent.com/hutchybakes-glitch/hutchybakes-glitch.github.io/main/data/...`. Don't move, rename or delete it.
 
 ## Adding a project (the usual task)
 1. Add one entry to `projects` in `data/projects.js`, copying the template at the bottom. Add one screenshot. **Don't edit `index.html`, `app.js` or `styles.css` to add content.**

@@ -17,7 +17,7 @@ window.PORTFOLIO = {
     ],
     links: {
       linkedin: "",                          // e.g. "https://www.linkedin.com/in/your-name"
-      github: "https://github.com/hutchybakes",
+      github: "https://github.com/hutchybakes-glitch",
       email: "",                             // e.g. "you@example.com" (shown as a mailto link)
       cv: "",                                // e.g. "cv/Sam-Hutchinson-CV.pdf" (put the PDF in the cv folder)
     },
