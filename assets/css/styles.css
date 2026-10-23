@@ -75,7 +75,7 @@ body[data-view="intro"] .crumbs { visibility: hidden; }
 .c-shadow { fill: rgba(0, 0, 0, .35); }
 .c-suit { fill: #313847; } .c-sleeve { fill: #262B36; stroke: #1C2029; stroke-width: 1.5; } .c-lapel { fill: #252A34; } .c-shirt { fill: #F3F2EE; } .c-cuff { fill: #F3F2EE; }
 .c-tie { fill: var(--brand); }
-.c-skin { fill: var(--skin); } .c-hair { fill: #4A3626; } .c-beard { fill: #3F2E22; } .c-lips { fill: #B9705C; }
+.c-skin { fill: var(--skin); } .c-hair { fill: #4A3626; } .c-tache { fill: #3A2A1F; } .c-part { fill: none; stroke: #1F1712; stroke-width: 2.5; stroke-linecap: round; }
 .c-comb { fill: none; stroke: #6E5644; stroke-width: 2.5; stroke-linecap: round; }
 .c-brow { stroke: #2A211B; stroke-width: 3.5; stroke-linecap: round; }
 .c-eye { fill: #1A1A1A; } .c-smile { fill: none; stroke: #6B3A2A; stroke-width: 3; stroke-linecap: round; }

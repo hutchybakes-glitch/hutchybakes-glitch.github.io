@@ -61,9 +61,9 @@
 
   // ---------- the character (an illustration, not a likeness) ----------
   const character = `
-    <svg class="character" viewBox="0 0 220 250" role="img" aria-label="An illustrated man in a suit with a beard and glasses, waving hello">
+    <svg class="character" viewBox="0 0 220 250" role="img" aria-label="An illustrated man in a suit with glasses and a moustache, waving hello">
       <ellipse cx="110" cy="246" rx="80" ry="5" class="c-shadow"/>
-      <path class="c-suit" d="M58 174c0-10 18-16 34-17h36c16 1 34 7 34 17l8 76H50Z"/>
+      <path class="c-suit" d="M58 174c0-10 18-16 34-17h36c16 1 34 7 34 17l-9 76H67Z"/>
       <path class="c-shirt" d="M90 158h40l-20 58Z"/>
       <path class="c-lapel" d="M90 158l20 58-28-26 8-8-12-10Z"/>
       <path class="c-lapel" d="M130 158l-20 58 28-26-8-8 12-10Z"/>
@@ -80,13 +80,14 @@
       <rect class="c-skin" x="100" y="128" width="20" height="32" rx="8"/>
       <circle class="c-skin" cx="70" cy="100" r="8"/><circle class="c-skin" cx="150" cy="100" r="8"/>
       <ellipse class="c-skin" cx="110" cy="94" rx="40" ry="44"/>
-      <path class="c-beard" d="M70 98c0 30 18 46 40 46s40-16 40-46c-5 12-14 18-22 18-6-6-30-6-36 0-8 0-17-6-22-18Z"/>
-      <ellipse class="c-lips" cx="110" cy="123" rx="7" ry="2.6"/>
-      <path class="c-hair" d="M70 98c-6-36 14-56 40-56s48 18 40 56l-5-16-6 8-4-18-8 10-6-16-7 14-8-16-7 15-8-13-5 16-6-10-3 14Z"/>
-      <path class="c-hair" d="M88 50l2-16 12 12ZM106 44l8-16 8 16ZM124 48l14-10-2 16ZM74 66l-12-10 14 2Z"/>
+      <path class="c-hair" d="M70 96c-6-34 14-54 40-54 28 0 48 20 40 54-4-14-12-24-24-28-14-5-30-4-42 4-7 5-12 13-14 24Z"/>
+      <path class="c-part" d="M90 46c-4 8-6 16-6 24"/>
+      <path class="c-comb" d="M98 52c16-4 32 0 42 10M96 60c16-4 30 0 40 10"/>
       <path class="c-brow" d="M86 84h15M119 84h15"/>
       <circle class="c-glasses" cx="94" cy="98" r="12"/><circle class="c-glasses" cx="126" cy="98" r="12"/><path class="c-glasses-bridge" d="M106 97h8M82 96l-11-3M138 96l11-3"/>
       <circle class="c-eye" cx="94" cy="99" r="3"/><circle class="c-eye" cx="126" cy="99" r="3"/>
+      <path class="c-tache" d="M95 118c5-6 11-5 15-1 4-4 10-5 15 1-6 5-11 4-15 1-4 3-9 4-15-1Z"/>
+      <path class="c-smile" d="M102 127q8 5 16 0"/>
     </svg>`;
 
   // ---------- views ----------
