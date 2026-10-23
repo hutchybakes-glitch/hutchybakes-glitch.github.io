@@ -61,24 +61,29 @@
 
   // ---------- the character (an illustration, not a likeness) ----------
   const character = `
-    <svg class="character" viewBox="0 0 260 300" role="img" aria-label="An illustrated character waving hello">
-      <ellipse cx="130" cy="292" rx="88" ry="8" class="c-shadow"/>
-      <path class="c-body" d="M44 300c0-62 36-98 86-98s86 36 86 98Z"/>
-      <path class="c-collar" d="M108 206l22 26 22-26"/>
-      <rect class="c-lanyard" x="127" y="232" width="6" height="40" rx="3"/>
-      <rect class="c-badge" x="117" y="268" width="26" height="20" rx="4"/>
+    <svg class="character" viewBox="0 0 220 250" role="img" aria-label="An illustrated businessman in a suit, waving hello">
+      <ellipse cx="110" cy="244" rx="74" ry="6" class="c-shadow"/>
       <g class="c-arm-wave">
-        <path class="c-body" d="M196 228c22-20 30-58 26-86l-18-2c2 26-4 54-22 70Z"/>
-        <circle class="c-skin" cx="214" cy="132" r="15"/>
+        <path class="c-suit" d="M168 200c16-14 24-42 22-70l-16-1c0 22-6 44-20 58Z"/>
+        <rect class="c-cuff" x="171" y="124" width="20" height="8" rx="3"/>
+        <circle class="c-skin" cx="181" cy="114" r="12"/>
       </g>
-      <rect class="c-skin" x="116" y="176" width="28" height="32" rx="10"/>
-      <circle class="c-skin" cx="77" cy="134" r="11"/><circle class="c-skin" cx="183" cy="134" r="11"/>
-      <circle class="c-skin" cx="130" cy="128" r="54"/>
-      <path class="c-hair" d="M76 124c-4-40 22-66 56-66 30 0 54 18 54 52-12-14-30-20-52-20-24 0-42 10-58 34Z"/>
-      <circle class="c-eye" cx="110" cy="132" r="5"/><circle class="c-eye" cx="150" cy="132" r="5"/>
-      <rect class="c-glasses" x="96" y="120" width="28" height="22" rx="9"/><rect class="c-glasses" x="136" y="120" width="28" height="22" rx="9"/><path class="c-glasses-bridge" d="M124 130h12"/>
-      <path class="c-smile" d="M114 156c8 9 24 9 32 0"/>
-      <circle class="c-cheek" cx="98" cy="152" r="7"/><circle class="c-cheek" cx="162" cy="152" r="7"/>
+      <path class="c-suit" d="M30 250c0-52 32-82 80-82s80 30 80 82Z"/>
+      <path class="c-shirt" d="M88 170h44l-22 62Z"/>
+      <path class="c-lapel" d="M88 170l22 62-30-30 8-8-10-10Z"/>
+      <path class="c-lapel" d="M132 170l-22 62 30-30-8-8 10-10Z"/>
+      <path class="c-tie" d="M104 174h12l-2 10h-8Z"/>
+      <path class="c-tie" d="M106 184h8l5 34-9 12-9-12Z"/>
+      <rect class="c-skin" x="99" y="146" width="22" height="28" rx="8"/>
+      <circle class="c-skin" cx="66" cy="102" r="9"/><circle class="c-skin" cx="154" cy="102" r="9"/>
+      <ellipse class="c-skin" cx="110" cy="100" rx="44" ry="48"/>
+      <path class="c-hair" d="M66 92c-2-34 20-48 44-48s46 14 44 48c-8-18-24-26-44-26S74 74 66 92Z"/>
+      <path class="c-comb" d="M88 56c8-4 16-5 24-5M84 64c10-6 22-8 36-6"/>
+      <path class="c-brow" d="M84 86h16M120 86h16"/>
+      <circle class="c-glasses" cx="94" cy="102" r="13"/><circle class="c-glasses" cx="126" cy="102" r="13"/><path class="c-glasses-bridge" d="M107 101h6M81 100l-13-3M139 100l13-3"/>
+      <circle class="c-eye" cx="94" cy="103" r="3"/><circle class="c-eye" cx="126" cy="103" r="3"/>
+      <path class="c-tache" d="M95 126c5-6 11-5 15-1 4-4 10-5 15 1-6 5-11 4-15 1-4 3-9 4-15-1Z"/>
+      <path class="c-smile" d="M102 136q8 5 16 0"/>
     </svg>`;
 
   // ---------- views ----------
@@ -87,7 +92,6 @@
       document.title = `${profile.name} · Power BI portfolio`;
       return `
         <section class="intro" aria-labelledby="intro-title">
-          <div class="rain" aria-hidden="true">${Array.from({ length: 18 }, (_, i) => `<i style="--x:${(i * 53) % 100}%;--d:${(i * 0.37) % 2.4}s;--h:${30 + (i * 17) % 50}px"></i>`).join('')}</div>
           <div class="intro-stage">
             <div class="speech" id="speech">
               <p class="sr">${esc(profile.greeting)}</p>
@@ -231,7 +235,7 @@
   // ---------- theme toggle ----------
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const root = document.documentElement;
-    const current = root.dataset.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const current = root.dataset.theme || 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
     root.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch (e) {}
