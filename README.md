@@ -20,37 +20,33 @@ tools/crop_screenshot.py    crops a Power BI screenshot to the report page and s
 CLAUDE.md                   rules for Claude Code sessions that edit this site
 ```
 
-## Fill in your links (once)
+## How the site works
+Three screens, switched with links like `#/portfolio/rainfall`, so the browser's Back button works:
+1. **Intro (`#/`):** an illustrated character with a speech bubble (`profile.greeting`) and a Power BI icon to click.
+2. **Portal (`#/portfolio`):** one tile per topic. A topic with a `report` is live and clickable. A topic without one shows "In the works".
+3. **Report page (`#/portfolio/<topic-id>`):** preview with page tabs, the live link, what it does, real-world uses, how it is built, and the data sources.
 
+## Fill in your links (once)
 Open `data/projects.js` and fill in `profile.links`: `linkedin`, `email` and `cv`, for example `"cv/Sam-Hutchinson-CV.pdf"` once the PDF is in `cv/`. Any link left as `""` is hidden.
 
-## Adding a project
+## Adding a report
+1. Save a screenshot of each report page in `images/projects/` (see below).
+2. In `data/projects.js`, find the topic (for example `fuel-prices`) and add a `report: { ... }` block to it, copying the Rainfall one. To add a new topic, copy a whole topic entry and give it a new `id`, `title`, `icon` (`rain`, `fuel`, `energy` or `people`), `colour` and `teaser`.
 
-1. **Take a screenshot** (see below) and save it as `images/projects/<project-id>.webp`.
-2. **Open `data/projects.js`.** Copy the template block at the bottom of the `projects` list, paste it above the template, remove the `/*` and `*/` around your copy, and fill it in:
+| Report field | What to put |
+|---|---|
+| `title`, `date`, `summary` | Report name, year-month (`"2026-12"`), and one or two sentences |
+| `liveUrl` | The **Publish to web** link (`https://app.powerbi.com/view?r=...`). Leave `""` to show "Live report coming soon" |
+| `refreshSchedule` | Scheduled refresh times set in the Power BI Service, in UK time, e.g. `["06:00", "12:00"]`. The page shows the last and next update |
+| `pages` | One entry per screenshot: `{ label: "Page name", src: "images/projects/x.webp", alt: "What it shows" }`. These become the tabs |
+| `stats` | Four headline numbers: `{ value: "207k", label: "..." }` |
+| `features` | What it does, one point per line |
+| `uses` | Real-world uses: `{ who: "Who", what: "How they would use it" }` (plus an optional `usesNote`) |
+| `pipeline` | How it is built, left to right: `{ step: "DAX", detail: "..." }` (six steps fit best) |
+| `techniques` | Key techniques, one per line |
+| `tools`, `dataSources` | Tags, and `{ name, licence, url }` for each source |
 
-| Field | Required | What to put |
-|---|---|---|
-| `id` | yes | Short, unique, lower case with dashes, e.g. `"energy-prices"`. Also the deep link: `#energy-prices` opens its case study |
-| `title` | yes | Project name |
-| `type` | yes | `"Power BI report"`, `"Python app"`, `"Tool"`... When there are two or more types, filter buttons appear automatically |
-| `date` | yes | Year-month finished, `"2026-12"` |
-| `featured` | no | `true` gives it the large slot at the top (only one project should be featured) |
-| `summary` | yes | One sentence for the card |
-| `image`, `imageAlt` | yes | Screenshot path, and one sentence describing what it shows (for screen readers) |
-| `gallery` | no | Extra screenshots for the case study: `[{ src: "...", alt: "..." }]` |
-| `liveUrl` | no | The **Publish to web** link (`https://app.powerbi.com/view?r=...`). Leave `""` to show "Live report coming soon" |
-| `sourceUrl` | no | A GitHub repo, if there is one |
-| `stats` | no | Up to 4 headline numbers for the featured slot: `{ value: "207k", label: "searchable places" }` |
-| `problem` | no | The problem it solves (2–3 sentences) |
-| `built` | no | What you built, one bullet per line |
-| `techniques` | no | Key techniques (DAX patterns, modelling, APIs) |
-| `tools` | yes | Tags such as `["Power BI", "DAX"]`. These also feed the Toolkit strip |
-| `dataSources` | no | `[{ name: "...", licence: "...", url: "..." }]` |
-
-3. **Check the page.** Open `index.html` in a browser (it works straight from disk), then commit and push (see below).
-
-Keep the commas: every `{ ... }` in a list ends with `},`. If the page shows "Could not load data/projects.js", open the browser console (F12), which names the broken line.
+3. Open `index.html` in a browser to check it, then commit and push.
 
 ## Screenshots: how to take and size them
 
