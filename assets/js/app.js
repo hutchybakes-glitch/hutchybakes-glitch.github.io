@@ -56,7 +56,7 @@
         <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
         <div class="tabs" role="tablist" aria-label="Report pages">${r.pages.map((p, i) => `<button type="button" role="tab" id="tab-${id}-${i}" aria-selected="${i === 0}" aria-controls="pane-${id}" data-src="${esc(p.src)}" data-alt="${esc(p.alt)}">${esc(p.label)}</button>`).join('')}</div>
       </div>
-      <figure class="shot" id="pane-${id}" role="tabpanel" aria-labelledby="tab-${id}-0"><img src="${esc(r.pages[0].src)}" alt="${esc(r.pages[0].alt)}" width="1600" height="894" decoding="async"></figure>
+      <figure class="shot" id="pane-${id}" role="tabpanel" aria-labelledby="tab-${id}-0"><img src="${esc(r.pages[0].src)}" alt="${esc(r.pages[0].alt)}" width="1600" height="894" decoding="async"><span class="shot-loading" role="status"><span class="spinner" aria-hidden="true"></span><span class="shot-loading-text">Loading page…</span></span></figure>
     </div>`;
 
   // ---------- the character (an illustration, not a likeness) ----------
@@ -213,6 +213,7 @@
       document.body.dataset.view = view;
       app.innerHTML = html;
       window.scrollTo(0, 0);
+      if (view === 'topic') app.querySelectorAll('.tabs [data-src]').forEach(b => { const pre = new Image(); pre.decoding = 'async'; pre.src = b.dataset.src; });
       if (view === 'intro') typeGreeting(); else { clearInterval(typingTimer); const h = app.querySelector('h1'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
     };
     if (document.startViewTransition && !reduceMotion && app.innerHTML) document.startViewTransition(swap); else swap();
@@ -225,7 +226,16 @@
     const tab = e.target.closest('.tabs [role="tab"]'); if (!tab) return;
     const frame = tab.closest('.browser');
     frame.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected', b === tab));
-    const img = frame.querySelector('img'); img.src = tab.dataset.src; img.alt = tab.dataset.alt;
+    const pane = frame.querySelector('[role="tabpanel"]'), img = pane.querySelector('img');
+    if (img.getAttribute('src') !== tab.dataset.src) {
+      // Overlay on until the picture has loaded (or failed), so a slow page never looks broken
+      const done = () => { pane.classList.remove('loading'); pane.removeAttribute('aria-busy'); };
+      pane.classList.add('loading'); pane.setAttribute('aria-busy', 'true');
+      img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true });
+      img.src = tab.dataset.src;
+      if (img.complete) done();
+    }
+    img.alt = tab.dataset.alt;
     frame.querySelector('[role="tabpanel"]').setAttribute('aria-labelledby', tab.id);
   });
   // In-page jump links must not change the route
