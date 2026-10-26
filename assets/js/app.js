@@ -45,7 +45,7 @@
     const past = times.filter(t => t <= now);
     const last = past.length ? past[past.length - 1] : times[times.length - 1];
     const next = times.find(t => t > now) || times[0];
-    return `<p class="status"><span class="dot" aria-hidden="true"></span><span><strong>Live data</strong> · refreshes ${times.length} times a day · last scheduled update ${last}${past.length ? '' : ' yesterday'}, next ${next} (UK time)</span></p>`;
+    return `<p class="status"><span class="dot" aria-hidden="true"></span><span><strong>Live data</strong> · refreshes ${times.length === 1 ? 'once' : times.length + ' times'} a day · last scheduled update ${last}${past.length ? '' : ' yesterday'}, next ${next} (UK time)</span></p>`;
   };
   const liveButton = (r, cls = '') => r.liveUrl
     ? `<a class="btn primary ${cls}" href="${esc(r.liveUrl)}" target="_blank" rel="noopener">Open the live report ${icon('arrow')}<span class="sr">(opens in a new tab)</span></a>`
