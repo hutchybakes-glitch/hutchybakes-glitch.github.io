@@ -21,4 +21,5 @@ A static portfolio site for Sam Hutchinson, served by GitHub Pages from the repo
 - The home page character is an illustration (inline SVG in `app.js`), not a likeness of a real person.
 - Accessibility: semantic landmarks, a visible `:focus-visible` ring, a skip link, and `prefers-reduced-motion` respected. External links open in a new tab, with a screen-reader note.
 - No frameworks, trackers or build tools. Keep the page fast.
+- After changing `styles.css`, `projects.js` or `app.js`, change the `?v=` date on all three links in `index.html`, or visitors may get the old files for up to 10 minutes.
 - Content is personal work on public data only. Never add employer or confidential data.

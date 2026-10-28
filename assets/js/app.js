@@ -22,6 +22,7 @@
     people: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/>',
     arrow: '<path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/>',
     back: '<path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>',
+    next: '<path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>',
     down: '<path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>',
     home: '<path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z" stroke-linejoin="round"/>',
     linkedin: '<path d="M4 9h3v11H4zM5.5 4a1.75 1.75 0 1 1 0 3.5 1.75 1.75 0 0 1 0-3.5zM10 9h2.9v1.5h.04c.4-.76 1.4-1.6 2.9-1.6 3.1 0 3.66 2 3.66 4.7V20h-3v-5.6c0-1.3 0-3-1.85-3s-2.13 1.45-2.13 2.9V20H10z" fill="currentColor" stroke="none"/>',
@@ -57,13 +58,19 @@
   const codeButton = (r, cls = '') => r.codeUrl
     ? `<a class="btn ghost ${cls}" href="${esc(r.codeUrl)}" target="_blank" rel="noopener">${icon('github')} View the code<span class="sr">(GitHub, opens in a new tab)</span></a>`
     : '';
+  // Previous / next arrows and a page counter over a page preview (home tiles and report pages)
+  const thumb = src => src.replace('images/projects/', 'images/projects/thumbs/');
+  const flick = (r, i = 0) => `
+    <button type="button" class="flick prev" data-step="-1" aria-label="Previous page of ${esc(r.title)}">${icon('back')}</button>
+    <button type="button" class="flick next" data-step="1" aria-label="Next page of ${esc(r.title)}">${icon('next')}</button>
+    <span class="flick-label" aria-live="polite">${i + 1} / ${r.pages.length} · ${esc(r.pages[i].label)}</span>`;
   const browser = (r, id) => `
     <div class="browser">
       <div class="browser-bar">
         <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
         <div class="tabs" role="tablist" aria-label="Report pages">${r.pages.map((p, i) => `<button type="button" role="tab" id="tab-${id}-${i}" aria-selected="${i === 0}" aria-controls="pane-${id}" data-src="${esc(p.src)}" data-alt="${esc(p.alt)}">${esc(p.label)}</button>`).join('')}</div>
       </div>
-      <figure class="shot" id="pane-${id}" role="tabpanel" aria-labelledby="tab-${id}-0"><img src="${esc(r.pages[0].src)}" alt="${esc(r.pages[0].alt)}" width="1600" height="894" decoding="async"><span class="shot-loading" role="status"><span class="spinner" aria-hidden="true"></span><span class="shot-loading-text">Loading page…</span></span></figure>
+      <figure class="shot" id="pane-${id}" role="tabpanel" aria-labelledby="tab-${id}-0"><img src="${esc(r.pages[0].src)}" alt="${esc(r.pages[0].alt)}" width="1600" height="894" decoding="async"><span class="shot-loading" role="status"><span class="spinner" aria-hidden="true"></span><span class="shot-loading-text">Loading page…</span></span>${r.pages.length > 1 ? flick(r) : ''}</figure>
     </div>`;
 
   // ---------- the character (an illustration, not a likeness) ----------
@@ -109,7 +116,7 @@
         if (!r) return `<li class="tile soon" style="--c:${esc(t.colour)}" aria-disabled="true"><div>
             <span class="tile-icon" style="--c:${esc(t.colour)}">${icon(t.icon)}</span>
             <span class="tile-text"><span class="tile-status">In the works</span><span class="tile-title">${esc(t.title)}</span><span class="tile-teaser">${esc(t.teaser)}</span></span></div></li>`;
-        return `<li class="tile live" style="--c:${esc(t.colour)}"><a href="#/portfolio/${esc(t.id)}">
+        return `<li class="tile live" style="--c:${esc(t.colour)}"><a class="tile-main" href="#/portfolio/${esc(t.id)}">
             <span class="tile-icon" style="--c:${esc(t.colour)}">${icon(t.icon)}</span>
             <span class="tile-text">
               <span class="tile-status is-live"><span class="dot" aria-hidden="true"></span>Live report · ${esc(t.title)}</span>
@@ -118,8 +125,11 @@
               <span class="tile-facts">${(r.stats || []).slice(0, 2).map(x => `<span><b>${esc(x.value)}</b> ${esc(x.label)}</span>`).join('')}</span>
               <span class="tile-cta">See how it was built ${icon('arrow')}</span>
             </span>
-            <span class="tile-preview"><img src="${esc(r.pages[0].src.replace('images/projects/', 'images/projects/thumbs/'))}" alt="" width="800" height="450" loading="lazy" decoding="async"></span>
-          </a></li>`;
+          </a>
+          <div class="tile-preview" data-topic="${esc(t.id)}" data-i="0">
+            <a href="#/portfolio/${esc(t.id)}" tabindex="-1" aria-hidden="true"><img src="${esc(thumb(r.pages[0].src))}" alt="" width="800" height="450" loading="lazy" decoding="async"></a>
+            ${r.pages.length > 1 ? flick(r) : ''}
+          </div></li>`;
       };
       // Each skill links to the reports that show it
       const skill = k => `<li><h3>${esc(k.title)}</h3><p>${esc(k.text)}</p>
@@ -253,6 +263,44 @@
     }
     img.alt = tab.dataset.alt;
     frame.querySelector('[role="tabpanel"]').setAttribute('aria-labelledby', tab.id);
+  });
+  // ---------- page flicker: arrows (and swipes) step through a report's pages ----------
+  const stepPages = (box, dir) => {
+    // Report page: move to the neighbouring tab, which swaps the picture
+    const frame = box.closest('.browser');
+    if (frame) {
+      const tabs = [...frame.querySelectorAll('[role="tab"]')];
+      const i = tabs.findIndex(b => b.getAttribute('aria-selected') === 'true');
+      const n = (i + dir + tabs.length) % tabs.length;
+      tabs[n].click(); tabs[n].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      box.querySelector('.flick-label').textContent = `${n + 1} / ${tabs.length} · ${tabs[n].textContent}`;
+      return;
+    }
+    // Home tile: show the next page's thumbnail
+    const r = topics.find(t => t.id === box.dataset.topic).report;
+    const n = (+box.dataset.i + dir + r.pages.length) % r.pages.length;
+    box.dataset.i = n;
+    box.querySelector('img').src = thumb(r.pages[n].src);
+    box.querySelector('.flick-label').textContent = `${n + 1} / ${r.pages.length} · ${r.pages[n].label}`;
+  };
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.flick'); if (!b) return;
+    stepPages(b.closest('.tile-preview, .shot'), +b.dataset.step);
+  });
+  // Swipe left or right on a preview (touch screens)
+  let swipe = null;
+  document.addEventListener('pointerdown', e => { const box = e.target.closest('.tile-preview, .shot'); swipe = box && box.querySelector('.flick') && e.pointerType !== 'mouse' ? { box, x: e.clientX, y: e.clientY } : null; });
+  document.addEventListener('pointerup', e => {
+    if (!swipe) return;
+    const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) stepPages(swipe.box, dx < 0 ? 1 : -1);
+    swipe = null;
+  });
+  // Keep the report preview's counter right when a tab is clicked directly
+  document.addEventListener('click', e => {
+    const tab = e.target.closest('.tabs [role="tab"]'); if (!tab) return;
+    const tabs = [...tab.parentElement.children], label = tab.closest('.browser').querySelector('.flick-label');
+    if (label) label.textContent = `${tabs.indexOf(tab) + 1} / ${tabs.length} · ${tab.textContent}`;
   });
   // In-page jump links (report sections, "See the live reports") must not change the route
   document.addEventListener('click', e => {

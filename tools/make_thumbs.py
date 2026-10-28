@@ -1,5 +1,5 @@
 # Makes the small images the site needs from the full page screenshots:
-# - images/projects/thumbs/<name>.webp: an 800 px wide copy of each report's first page, used on the topic tiles
+# - images/projects/thumbs/<name>.webp: an 800 px wide copy of every report page, used by the home page tiles' page flicker
 # - images/og-card.png: the 1200 x 630 picture shown when the site link is shared (LinkedIn, Teams, Slack, email)
 # Run from the repo root after adding or replacing screenshots: python tools/make_thumbs.py
 
@@ -12,19 +12,21 @@ from PIL import Image, ImageDraw, ImageFont
 
 # The repo root (this file lives in tools/).
 ROOT = Path(__file__).resolve().parent.parent
-# Ask Node for each live report's first screenshot, in the order the portal shows them.
-srcs = json.loads(subprocess.check_output(
-    # Load projects.js the way the browser does and print the first page of each live report.
-    ["node", "-e", "global.window={};require('./data/projects.js');console.log(JSON.stringify(window.PORTFOLIO.topics.filter(t=>t.report).map(t=>t.report.pages[0].src)))"],
+# Ask Node for every live report's screenshots, in the order the home page shows them.
+pages = json.loads(subprocess.check_output(
+    # Load projects.js the way the browser does and print each live report's page list.
+    ["node", "-e", "global.window={};require('./data/projects.js');console.log(JSON.stringify(window.PORTFOLIO.topics.filter(t=>t.report).map(t=>t.report.pages.map(p=>p.src))))"],
     # Run it from the repo root so the relative path works.
     cwd=ROOT, text=True))
+# Each report's first page, for the share card.
+srcs = [p[0] for p in pages]
 
 # The thumbnails folder.
 thumbs = ROOT / "images" / "projects" / "thumbs"
 # Create it if this is the first run.
 thumbs.mkdir(parents=True, exist_ok=True)
-# Make an 800 px wide copy of each first page.
-for src in srcs:
+# Make an 800 px wide copy of every page.
+for src in [s for p in pages for s in p]:
     # Open the full screenshot.
     im = Image.open(ROOT / src).convert("RGB")
     # Resize to 800 px wide, keeping the shape.
