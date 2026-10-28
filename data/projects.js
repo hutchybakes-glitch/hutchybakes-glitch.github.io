@@ -32,6 +32,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Type any North West town, village or postcode and see the rain that has fallen, the forecast hour by hour, and what is coming over the next few days, in plain English.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiN2YxZjE4MzktYjkyNC00YWFmLWIyZjUtNTI1NDg3YTcxNmZkIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
+        codeUrl: "https://github.com/swhutchinson/nw-rainfall-watch",   // the Power BI Project on GitHub
         // Scheduled refresh times (UK time) set in the Power BI Service; the page shows the last and next update
         refreshSchedule: ["00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"],
         pages: [
@@ -95,6 +96,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Every forecourt in the UK on one live map, refreshed through the day: where fuel is cheapest near any town or postcode, which brands and regions charge most, what each fuel really costs per mile for a fleet vehicle, and how prices have moved since 2003.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMTQyYjJmMTItNmNmOS00MjI5LWE3ZDItNjk2MDdlODNjZWM2IiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
+        codeUrl: "https://github.com/swhutchinson/uk-fuel-watch",   // the Power BI Project on GitHub
         // Scheduled refresh times (UK time) set in the Power BI Service, about 50 minutes after each price snapshot
         refreshSchedule: ["07:30", "10:30", "13:30", "16:30", "19:30", "22:30"],
         pages: [
@@ -166,6 +168,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Every evening, a machine-learning forecast of tomorrow's electricity prices and an exact plan for when a battery should charge and when it should use its power. Every past day is settled at the real prices, so the report shows what each way of running a battery would have earned, how long one takes to pay for itself, and how much a good forecast is worth.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMTBmN2VhODYtM2MzMC00ZGVmLTllNTEtOGU3N2QxOGE1Y2RjIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
+        codeUrl: "https://github.com/swhutchinson/gb-battery-watch",   // the Power BI Project on GitHub
         // Scheduled refresh times (UK time) set in the Power BI Service: GitHub often starts the 06:15 and 17:20 UTC pipeline runs hours late
         refreshSchedule: ["09:00", "13:30", "15:00", "22:00", "23:00", "23:30"],
         pages: [
@@ -231,6 +234,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "How the UK's population has grown and shrunk, from the four nations down to 7,000 towns and villages: where it is growing fastest, whether births, deaths or people moving drove the change, and where official projections say it is heading, from 1851 to 2050.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMzhlZDJmYWEtNmJkYS00NTlmLTkzYjAtYWZkMzczODFiMmQyIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
+        codeUrl: "https://github.com/swhutchinson/uk-population-watch",   // the Power BI Project on GitHub
         // Scheduled refresh time (UK time) set in the Power BI Service; the data changes once a year
         refreshSchedule: ["06:00"],
         pages: [
