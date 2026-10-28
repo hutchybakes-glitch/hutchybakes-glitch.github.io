@@ -68,14 +68,11 @@
 
   // ---------- the character (an illustration, not a likeness) ----------
   const character = `
-    <svg class="character" viewBox="0 0 220 250" role="img" aria-label="An illustrated man in a suit with glasses and a moustache, waving hello">
+    <svg class="character" viewBox="0 0 220 250" role="img" aria-label="An illustrated man in a grey jumper with glasses, a moustache and a short beard, waving hello">
       <ellipse cx="110" cy="246" rx="80" ry="5" class="c-shadow"/>
-      <path class="c-suit" d="M58 174c0-10 18-16 34-17h36c16 1 34 7 34 17l-9 76H67Z"/>
-      <path class="c-shirt" d="M90 158h40l-20 58Z"/>
-      <path class="c-lapel" d="M90 158l20 58-28-26 8-8-12-10Z"/>
-      <path class="c-lapel" d="M130 158l-20 58 28-26-8-8 12-10Z"/>
-      <path class="c-tie" d="M104 160h12l-2 9h-8Z"/>
-      <path class="c-tie" d="M106 169h8l5 32-9 11-9-11Z"/>
+      <path class="c-jumper" d="M58 174c0-10 18-16 34-17h36c16 1 34 7 34 17l-9 76H67Z"/>
+      <path class="c-knit" d="M80 200v40M96 196v48M124 196v48M140 200v40"/>
+      <path class="c-rib" d="M68 244h84"/>
       <path class="c-sleeve" d="M58 174c-14 6-20 24-20 44v14h18v-14c0-10 2-20 6-26Z"/>
       <rect class="c-cuff" x="38" y="228" width="18" height="6" rx="2"/>
       <circle class="c-skin" cx="47" cy="241" r="9"/>
@@ -85,6 +82,7 @@
         <circle class="c-skin" cx="182" cy="92" r="11"/>
       </g>
       <rect class="c-skin" x="100" y="128" width="20" height="32" rx="8"/>
+      <path class="c-neck" d="M91 158q19 13 38 0"/>
       <circle class="c-skin" cx="70" cy="100" r="8"/><circle class="c-skin" cx="150" cy="100" r="8"/>
       <ellipse class="c-skin" cx="110" cy="94" rx="40" ry="44"/>
       <path class="c-hair" d="M70 96c-6-34 14-54 40-54 28 0 48 20 40 54-4-14-12-24-24-28-14-5-30-4-42 4-7 5-12 13-14 24Z"/>
@@ -93,8 +91,9 @@
       <path class="c-brow" d="M86 84h15M119 84h15"/>
       <circle class="c-glasses" cx="94" cy="98" r="12"/><circle class="c-glasses" cx="126" cy="98" r="12"/><path class="c-glasses-bridge" d="M106 97h8M82 96l-11-3M138 96l11-3"/>
       <circle class="c-eye" cx="94" cy="99" r="3"/><circle class="c-eye" cx="126" cy="99" r="3"/>
-      <path class="c-tache" d="M95 118c5-6 11-5 15-1 4-4 10-5 15 1-6 5-11 4-15 1-4 3-9 4-15-1Z"/>
-      <path class="c-smile" d="M102 127q8 5 16 0"/>
+      <path class="c-beard" d="M71 102C72 124 88 141 110 141S148 124 149 102C144 116 136 122 128 122 122 120 116 119 110 119S98 120 92 122C84 122 76 116 71 102Z"/>
+      <path class="c-tache" d="M90 121c6-7 14-7 20-2 6-5 14-5 20 2l3 6c-5-2-9-4-13-4-4 0-7 2-10 2-3 0-6-2-10-2-4 0-8 2-13 4Z"/>
+      <path class="c-smile" d="M103 130q7 3 14 0"/>
     </svg>`;
 
   // ---------- views ----------

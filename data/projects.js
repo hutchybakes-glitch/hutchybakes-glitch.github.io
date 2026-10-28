@@ -17,7 +17,7 @@ window.PORTFOLIO = {
     pitch: "I build Power BI reports people actually use: live data feeds that refresh themselves, models tuned until every page feels instant, and designs that explain the numbers in plain English.",
     links: {
       linkedin: "https://www.linkedin.com/in/sam-hutchinson-677826243/",
-      github: "https://github.com/swhutchinson",
+      github: "",                            // hidden for now; e.g. "https://github.com/swhutchinson"
       email: "",                             // e.g. "you@example.com"
       cv: "",                                // e.g. "cv/Sam-Hutchinson-CV.pdf" (put the PDF in the cv folder)
     },

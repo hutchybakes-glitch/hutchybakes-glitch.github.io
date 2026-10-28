@@ -76,12 +76,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .character { width: min(200px, 40vw); height: auto; animation: rise .9s cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes rise { from { transform: translateY(40px); opacity: 0; } }
 .c-shadow { fill: rgba(0, 0, 0, .35); }
-.c-suit { fill: #313847; } .c-sleeve { fill: #262B36; stroke: #1C2029; stroke-width: 1.5; } .c-lapel { fill: #252A34; } .c-shirt { fill: #F3F2EE; } .c-cuff { fill: #F3F2EE; }
-.c-tie { fill: var(--brand); }
+.c-jumper { fill: #74777E; } .c-sleeve { fill: #686B72; stroke: #55585E; stroke-width: 1.5; } .c-cuff { fill: #55585E; }
+.c-knit { fill: none; stroke: #686B72; stroke-width: 1.5; stroke-linecap: round; } .c-rib { stroke: #55585E; stroke-width: 6; }
+.c-neck { fill: none; stroke: #55585E; stroke-width: 6; stroke-linecap: round; }
+.c-beard { fill: #3A2A1F; opacity: .82; }
 .c-skin { fill: var(--skin); } .c-hair { fill: #4A3626; } .c-tache { fill: #3A2A1F; } .c-part { fill: none; stroke: #1F1712; stroke-width: 2.5; stroke-linecap: round; }
 .c-comb { fill: none; stroke: #6E5644; stroke-width: 2.5; stroke-linecap: round; }
 .c-brow { stroke: #2A211B; stroke-width: 3.5; stroke-linecap: round; }
-.c-eye { fill: #1A1A1A; } .c-smile { fill: none; stroke: #6B3A2A; stroke-width: 3; stroke-linecap: round; }
+.c-eye { fill: #1A1A1A; } .c-smile { fill: none; stroke: #C98B6B; stroke-width: 3; stroke-linecap: round; }
 .c-glasses { fill: rgba(255, 255, 255, .12); stroke: #15151A; stroke-width: 3; } .c-glasses-bridge { fill: none; stroke: #15151A; stroke-width: 3; stroke-linecap: round; }
 .c-arm-wave { transform-origin: 162px 172px; animation: wave 1.6s ease-in-out .9s 3 both; }
 @keyframes wave { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-14deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-12deg); } 80% { transform: rotate(6deg); } }
