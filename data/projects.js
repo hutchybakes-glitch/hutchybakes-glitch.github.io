@@ -166,8 +166,8 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Every evening, a machine-learning forecast of tomorrow's electricity prices and an exact plan for when a battery should charge and when it should use its power. Every past day is settled at the real prices, so the report shows what each way of running a battery would have earned, how long one takes to pay for itself, and how much a good forecast is worth.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMTBmN2VhODYtM2MzMC00ZGVmLTllNTEtOGU3N2QxOGE1Y2RjIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
-        // Scheduled refresh times (UK time) set in the Power BI Service, after the 06:15 and 17:20 UTC pipeline runs
-        refreshSchedule: ["08:00", "19:30"],
+        // Scheduled refresh times (UK time) set in the Power BI Service: GitHub often starts the 06:15 and 17:20 UTC pipeline runs hours late
+        refreshSchedule: ["09:00", "13:30", "15:00", "22:00", "23:00", "23:30"],
         pages: [
           { label: "Tomorrow's plan", src: "images/projects/gb-battery-watch.webp", alt: "Tomorrow's plan page: the expected saving in large type, the charge and use-it times, a chart of the forecast price for each half-hour coloured by what the battery does, how full the battery is through the day, and how yesterday's plan did against the best possible." },
           { label: "Why prices move", src: "images/projects/gb-battery-watch-prices.webp", alt: "Why prices move page: a calendar of every half-hour of the last 12 months coloured from cheap blue to dear gold, with the daily price gap above and a typical day beside it, and a chart showing prices rise as wind and sun cover less of demand." },
@@ -179,7 +179,7 @@ window.PORTFOLIO = {
         stats: [
           { value: "64%", label: "of days the forecast beat a simple guess" },
           { value: "85%", label: "of the best possible saving captured by the plan" },
-          { value: "2×", label: "a day: forecast, plan and refresh" },
+          { value: "2×", label: "a day: new forecast and plan" },
           { value: "< 0.2 s", label: "per visual, even from a cold cache" },
         ],
         features: [
@@ -204,7 +204,7 @@ window.PORTFOLIO = {
           { step: "Data branch", detail: "Results published as CSVs to a GitHub branch, read without a gateway" },
           { step: "Model", detail: "Half-hourly facts, daily results for 4 strategies × 14 regions × 3 types × 3 efficiencies, 71 DAX measures" },
           { step: "Visuals", detail: "14 Deneb / Vega visuals generated from code" },
-          { step: "Service", detail: "2 scheduled refreshes a day, published to the web" },
+          { step: "Service", detail: "6 scheduled refreshes a day, published to the web" },
         ],
         techniques: [
           "A forecast that can't cheat: a LightGBM model trained only on what Elexon had published by 17:15 the day before, backtested on every day since January 2025 against a same-time-last-week guess.",

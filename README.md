@@ -61,6 +61,8 @@ Open `data/projects.js` and fill in `profile.links`: `linkedin`, `email` and `cv
 - **Size:** a 16:9 crop at least 900 px wide, ideally 1600 px (the script never makes images bigger than 1600 px wide). Cards crop to 16:9 from the top-left, so keep the important content top-left.
 - For a sharper image, capture with Desktop maximised on a larger monitor.
 
+After adding or replacing screenshots, run `python tools/make_thumbs.py`. It makes the 800 px tile images in `images/projects/thumbs/` and the link-preview picture `images/og-card.png` (shown when the site is shared on LinkedIn, Teams or email).
+
 ## Publishing to GitHub Pages
 
 First time:

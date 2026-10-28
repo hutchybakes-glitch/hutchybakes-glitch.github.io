@@ -50,6 +50,10 @@
   const liveButton = (r, cls = '') => r.liveUrl
     ? `<a class="btn primary ${cls}" href="${esc(r.liveUrl)}" target="_blank" rel="noopener">Open the live report ${icon('arrow')}<span class="sr">(opens in a new tab)</span></a>`
     : `<span class="btn soon ${cls}" aria-disabled="true">Live report coming soon</span>`;
+  // Link to the report's source on GitHub (the Power BI Project files), when the topic has one
+  const codeButton = (r, cls = '') => r.codeUrl
+    ? `<a class="btn ghost ${cls}" href="${esc(r.codeUrl)}" target="_blank" rel="noopener">${icon('github')} View the code<span class="sr">(GitHub, opens in a new tab)</span></a>`
+    : '';
   const browser = (r, id) => `
     <div class="browser">
       <div class="browser-bar">
@@ -122,7 +126,7 @@
             <span class="tile-teaser">${esc(t.teaser)}</span>
             ${live ? `<span class="tile-cta">Explore ${esc(t.report.title)} ${icon('arrow')}</span>` : ''}
           </span>
-          ${live ? `<span class="tile-preview"><img src="${esc(t.report.pages[0].src)}" alt="" loading="lazy" decoding="async"></span>` : ''}`;
+          ${live ? `<span class="tile-preview"><img src="${esc(t.report.pages[0].src.replace('images/projects/', 'images/projects/thumbs/'))}" alt="" width="800" height="450" loading="lazy" decoding="async"></span>` : ''}`;
         return live
           ? `<li class="tile live" style="--c:${esc(t.colour)}"><a href="#/portfolio/${esc(t.id)}">${inner}</a></li>`
           : `<li class="tile soon" style="--c:${esc(t.colour)}" aria-disabled="true"><div>${inner}</div></li>`;
@@ -149,7 +153,7 @@
             </div>
           </header>
           <p class="lede">${esc(r.summary)}</p>
-          <div class="actions">${liveButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} Back to topics</a></div>
+          <div class="actions">${liveButton(r, 'big')}${codeButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} Back to topics</a></div>
           ${refreshStatus(r)}
           ${browser(r, t.id)}
           <dl class="stats">${(r.stats || []).map(s => `<div><dd>${esc(s.value)}</dd><dt>${esc(s.label)}</dt></div>`).join('')}</dl>
@@ -174,7 +178,7 @@
               <ul class="tags">${r.tools.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
             </div></section>
 
-          <div class="report-end">${liveButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} Back to topics</a><a class="btn ghost big" href="#/">${icon('home')} Home</a></div>
+          <div class="report-end">${liveButton(r, 'big')}${codeButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} Back to topics</a><a class="btn ghost big" href="#/">${icon('home')} Home</a></div>
         </article>`;
     },
   };
