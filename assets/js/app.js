@@ -1,7 +1,7 @@
-/* Three-screen portfolio, rendered from window.PORTFOLIO (data/projects.js). Content lives only in the data file.
+/* Portfolio, rendered from window.PORTFOLIO (data/projects.js). Content lives only in the data file.
    Routes (hash-based, so the browser Back button and shared links work):
-     #/                      intro: character + speech bubble + Power BI icon
-     #/portfolio             portal: topic tiles
+     #/                      home: introduction, headline numbers, report tiles, skills, contact
+     #/portfolio             the same home page, scrolled to the reports
      #/portfolio/<topic-id>  report page for a topic
    No dependencies, no build step. */
 (function () {
@@ -22,6 +22,7 @@
     people: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/>',
     arrow: '<path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/>',
     back: '<path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>',
+    down: '<path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>',
     home: '<path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z" stroke-linejoin="round"/>',
     linkedin: '<path d="M4 9h3v11H4zM5.5 4a1.75 1.75 0 1 1 0 3.5 1.75 1.75 0 0 1 0-3.5zM10 9h2.9v1.5h.04c.4-.76 1.4-1.6 2.9-1.6 3.1 0 3.66 2 3.66 4.7V20h-3v-5.6c0-1.3 0-3-1.85-3s-2.13 1.45-2.13 2.9V20H10z" fill="currentColor" stroke="none"/>',
     github: '<path d="M12 2.5a9.5 9.5 0 0 0-3 18.5c.5.1.65-.2.65-.46v-1.7c-2.65.58-3.2-1.13-3.2-1.13-.44-1.1-1.06-1.4-1.06-1.4-.87-.6.06-.58.06-.58.96.07 1.47.99 1.47.99.85 1.46 2.24 1.04 2.78.8.09-.62.33-1.04.6-1.28-2.11-.24-4.33-1.06-4.33-4.7 0-1.04.37-1.89.98-2.55-.1-.24-.42-1.21.09-2.53 0 0 .8-.26 2.62.97a9 9 0 0 1 4.76 0c1.82-1.23 2.62-.97 2.62-.97.51 1.32.19 2.29.1 2.53.6.66.97 1.51.97 2.55 0 3.65-2.22 4.45-4.34 4.69.34.29.65.87.65 1.76v2.6c0 .26.17.57.66.47A9.5 9.5 0 0 0 12 2.5z" fill="currentColor" stroke="none"/>',
@@ -32,10 +33,12 @@
   // The Power BI-style mark: three rising bars
   const pbiMark = `<svg viewBox="0 0 64 64" aria-hidden="true" class="pbi-mark"><rect x="12" y="30" width="11" height="24" rx="3.5" fill="#C8930A"/><rect x="26.5" y="19" width="11" height="35" rx="3.5" fill="#E8B10D"/><rect x="41" y="9" width="11" height="45" rx="3.5" fill="#F2C811"/></svg>`;
 
-  // ---------- footer links ----------
+  // ---------- contact links (footer, hero and contact block) ----------
   const LABELS = { linkedin: 'LinkedIn', github: 'GitHub', email: 'Email', cv: 'CV' };
-  document.getElementById('footer-links').innerHTML = Object.entries(profile.links).filter(([, v]) => v).map(([k, v]) =>
-    `<li><a href="${esc(k === 'email' ? 'mailto:' + v : v)}"${k === 'email' || k === 'cv' ? '' : ' target="_blank" rel="noopener"'}>${icon(k)}<span>${LABELS[k]}</span></a></li>`).join('');
+  const contactLinks = Object.entries(profile.links).filter(([, v]) => v);
+  const linkAttrs = (k, v) => `href="${esc(k === 'email' ? 'mailto:' + v : v)}"${k === 'email' || k === 'cv' ? '' : ' target="_blank" rel="noopener"'}`;
+  const contactButtons = (cls = '') => contactLinks.map(([k, v]) => `<a class="btn ghost ${cls}" ${linkAttrs(k, v)}>${icon(k)} ${LABELS[k]}</a>`).join('');
+  document.getElementById('footer-links').innerHTML = contactLinks.map(([k, v]) => `<li><a ${linkAttrs(k, v)}>${icon(k)}<span>${LABELS[k]}</span></a></li>`).join('');
 
   // ---------- shared bits ----------
   const refreshStatus = r => {
@@ -96,47 +99,67 @@
 
   // ---------- views ----------
   const views = {
-    intro() {
-      document.title = `${profile.name} · Power BI portfolio`;
+    home() {
+      document.title = `${profile.name} · Power BI developer portfolio`;
+      const live = topics.filter(t => t.report);
+      // Refreshes a day across every report, for the "auto-refreshes" headline number
+      const refreshes = live.reduce((n, t) => n + (t.report.refreshSchedule || []).length, 0);
+      const highlight = h => `<div><dd>${esc(h.value === 'auto-refreshes' ? String(refreshes) : h.value)}</dd><dt>${esc(h.label)}</dt></div>`;
+      const tile = t => {
+        const r = t.report;
+        if (!r) return `<li class="tile soon" style="--c:${esc(t.colour)}" aria-disabled="true"><div>
+            <span class="tile-icon" style="--c:${esc(t.colour)}">${icon(t.icon)}</span>
+            <span class="tile-text"><span class="tile-status">In the works</span><span class="tile-title">${esc(t.title)}</span><span class="tile-teaser">${esc(t.teaser)}</span></span></div></li>`;
+        return `<li class="tile live" style="--c:${esc(t.colour)}"><a href="#/portfolio/${esc(t.id)}">
+            <span class="tile-icon" style="--c:${esc(t.colour)}">${icon(t.icon)}</span>
+            <span class="tile-text">
+              <span class="tile-status is-live"><span class="dot" aria-hidden="true"></span>Live report · ${esc(t.title)}</span>
+              <span class="tile-title">${esc(r.title)}</span>
+              <span class="tile-teaser">${esc(t.teaser)}</span>
+              <span class="tile-facts">${(r.stats || []).slice(0, 2).map(x => `<span><b>${esc(x.value)}</b> ${esc(x.label)}</span>`).join('')}</span>
+              <span class="tile-cta">See how it was built ${icon('arrow')}</span>
+            </span>
+            <span class="tile-preview"><img src="${esc(r.pages[0].src.replace('images/projects/', 'images/projects/thumbs/'))}" alt="" width="800" height="450" loading="lazy" decoding="async"></span>
+          </a></li>`;
+      };
+      // Each skill links to the reports that show it
+      const skill = k => `<li><h3>${esc(k.title)}</h3><p>${esc(k.text)}</p>
+          <p class="skill-links"><span>Seen in</span>${k.topics.map(id => topics.find(t => t.id === id && t.report)).filter(Boolean).map(t => `<a href="#/portfolio/${esc(t.id)}" style="--c:${esc(t.colour)}">${esc(t.report.title)}</a>`).join('')}</p></li>`;
       return `
-        <section class="intro" aria-labelledby="intro-title">
-          <div class="intro-stage">
+        <section class="hero wrap" aria-labelledby="hero-title">
+          <div class="hero-text">
+            <p class="eyebrow">${esc(profile.role)}</p>
+            <h1 id="hero-title">${esc(profile.name)}</h1>
+            <p class="hero-pitch">${esc(profile.pitch)}</p>
+            <div class="actions"><a class="btn primary big" href="#reports" data-jump>See the live reports ${icon('down')}</a>${contactButtons('big')}</div>
+          </div>
+          <div class="hero-art">
             <div class="speech" id="speech">
-              <p class="sr">${esc(profile.greeting)}</p>
-              <p class="typed" aria-hidden="true"><span id="typed"></span><span class="caret"></span></p>
+              <p class="greeting">${esc(profile.greeting)}</p>
             </div>
             ${character}
           </div>
-          <h1 id="intro-title" class="intro-name">${esc(profile.name)}<span>${esc(profile.role)}</span></h1>
-          <a class="pbi-button" href="#/portfolio" aria-label="Open the Power BI project portfolio">
-            <span class="pbi-tile">${pbiMark}</span>
-            <span class="pbi-label">Open portfolio</span>
-          </a>
-        </section>`;
-    },
-    portal() {
-      document.title = `Portfolio · ${profile.name}`;
-      const tile = t => {
-        const live = !!t.report;
-        const inner = `
-          <span class="tile-icon" style="--c:${esc(t.colour)}">${icon(t.icon)}</span>
-          <span class="tile-text">
-            <span class="tile-status ${live ? 'is-live' : ''}">${live ? '<span class="dot" aria-hidden="true"></span>Live report' : 'In the works'}</span>
-            <span class="tile-title">${esc(t.title)}</span>
-            <span class="tile-teaser">${esc(t.teaser)}</span>
-            ${live ? `<span class="tile-cta">Explore ${esc(t.report.title)} ${icon('arrow')}</span>` : ''}
-          </span>
-          ${live ? `<span class="tile-preview"><img src="${esc(t.report.pages[0].src.replace('images/projects/', 'images/projects/thumbs/'))}" alt="" width="800" height="450" loading="lazy" decoding="async"></span>` : ''}`;
-        return live
-          ? `<li class="tile live" style="--c:${esc(t.colour)}"><a href="#/portfolio/${esc(t.id)}">${inner}</a></li>`
-          : `<li class="tile soon" style="--c:${esc(t.colour)}" aria-disabled="true"><div>${inner}</div></li>`;
-      };
-      return `
-        <section class="portal wrap" aria-labelledby="portal-title">
-          <p class="eyebrow">Power BI portfolio · ${esc(profile.name)}</p>
-          <h1 id="portal-title">Choose a topic</h1>
-          <p class="lede">Each topic is a Power BI report built end to end on live public data: the API pipeline, the data model, the DAX and the visual design.</p>
+        </section>
+        <section class="wrap" aria-label="At a glance"><dl class="stats highlights">${(profile.highlights || []).map(highlight).join('')}</dl></section>
+
+        <section class="portal wrap" id="reports" aria-labelledby="reports-title">
+          <p class="eyebrow">Portfolio</p>
+          <h2 id="reports-title">Live Power BI reports</h2>
+          <p class="lede">Each one is built end to end on live public data, from the API pipeline to the data model, the DAX and the visual design. Open any report in your browser with no sign-in, or read how it was built and why.</p>
           <ul class="tiles">${topics.map(tile).join('')}</ul>
+        </section>
+
+        <section class="skills wrap" id="skills" aria-labelledby="skills-title">
+          <p class="eyebrow">What I bring</p>
+          <h2 id="skills-title">Skills, with the evidence</h2>
+          <p class="lede">Every claim here is backed by a report you can open, and a write-up of how it was built.</p>
+          <ul class="skill-grid">${(profile.skills || []).map(skill).join('')}</ul>
+        </section>
+
+        <section class="contact wrap" aria-labelledby="contact-title">
+          <h2 id="contact-title">Hiring for Power BI?</h2>
+          <p class="lede">I'd be glad to talk through any of these reports, or how the same approach could work on your data.</p>
+          <div class="actions">${contactButtons('big')}</div>
         </section>`;
     },
     topic(t) {
@@ -144,7 +167,7 @@
       document.title = `${r.title} · ${profile.name}`;
       return `
         <article class="report wrap" aria-labelledby="report-title" style="--c:${esc(t.colour)}">
-          <a class="back" href="#/portfolio">${icon('back')}<span>All topics</span></a>
+          <a class="back" href="#/portfolio">${icon('back')}<span>All reports</span></a>
           <header class="report-head">
             <span class="tile-icon big" style="--c:${esc(t.colour)}">${icon(t.icon)}</span>
             <div>
@@ -153,7 +176,7 @@
             </div>
           </header>
           <p class="lede">${esc(r.summary)}</p>
-          <div class="actions">${liveButton(r, 'big')}${codeButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} Back to topics</a></div>
+          <div class="actions">${liveButton(r, 'big')}${codeButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} All reports</a></div>
           ${refreshStatus(r)}
           ${browser(r, t.id)}
           <dl class="stats">${(r.stats || []).map(s => `<div><dd>${esc(s.value)}</dd><dt>${esc(s.label)}</dt></div>`).join('')}</dl>
@@ -178,7 +201,7 @@
               <ul class="tags">${r.tools.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
             </div></section>
 
-          <div class="report-end">${liveButton(r, 'big')}${codeButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} Back to topics</a><a class="btn ghost big" href="#/">${icon('home')} Home</a></div>
+          <div class="report-end">${liveButton(r, 'big')}${codeButton(r, 'big')}<a class="btn ghost big" href="#/portfolio">${icon('back')} All reports</a></div>
         </article>`;
     },
   };
@@ -190,35 +213,25 @@
       trail.map((c, i) => i === trail.length - 1 ? `<span class="sep" aria-hidden="true">/</span><span aria-current="page">${esc(c.label)}</span>` : `<span class="sep" aria-hidden="true">/</span><a href="${c.href}">${esc(c.label)}</a>`).join('');
   };
 
-  // ---------- typing effect for the speech bubble ----------
-  let typingTimer = null;
-  const typeGreeting = () => {
-    const el = document.getElementById('typed'); if (!el) return;
-    const text = profile.greeting;
-    if (reduceMotion) { el.textContent = text; return; }
-    let i = 0; el.textContent = '';
-    clearInterval(typingTimer);
-    setTimeout(() => { typingTimer = setInterval(() => { el.textContent = text.slice(0, ++i); if (i >= text.length) clearInterval(typingTimer); }, 34); }, 650);
-  };
-
   // ---------- router ----------
   const render = () => {
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     // Older links (#nw-rainfall-watch) go to the Rainfall report
     if (parts[0] === 'nw-rainfall-watch') { location.replace('#/portfolio/rainfall'); return; }
-    let html, view = 'intro';
+    let html, view = 'home', anchor = null;
     if (parts[0] === 'portfolio' && parts[1]) {
       const t = topics.find(x => x.id === parts[1] && x.report);
-      if (t) { html = views.topic(t); view = 'topic'; crumbs([{ label: 'Portfolio', href: '#/portfolio' }, { label: t.title }]); }
+      if (t) { html = views.topic(t); view = 'topic'; crumbs([{ label: 'Reports', href: '#/portfolio' }, { label: t.title }]); }
       else { location.replace('#/portfolio'); return; }
-    } else if (parts[0] === 'portfolio') { html = views.portal(); view = 'portal'; crumbs([{ label: 'Portfolio' }]); }
-    else { html = views.intro(); crumbs([]); }
+    } else { html = views.home(); crumbs([]); if (parts[0] === 'portfolio') anchor = 'reports'; }
     const swap = () => {
       document.body.dataset.view = view;
       app.innerHTML = html;
-      window.scrollTo(0, 0);
+      const target = anchor && document.getElementById(anchor);
+      if (target) target.scrollIntoView({ block: 'start' }); else window.scrollTo(0, 0);
       if (view === 'topic') app.querySelectorAll('.tabs [data-src]').forEach(b => { const pre = new Image(); pre.decoding = 'async'; pre.src = b.dataset.src; });
-      if (view === 'intro') typeGreeting(); else { clearInterval(typingTimer); const h = app.querySelector('h1'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
+      const h = target ? target.querySelector('h2') : app.querySelector('h1');
+      if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
     };
     if (document.startViewTransition && !reduceMotion && app.innerHTML) document.startViewTransition(swap); else swap();
   };
@@ -242,9 +255,9 @@
     img.alt = tab.dataset.alt;
     frame.querySelector('[role="tabpanel"]').setAttribute('aria-labelledby', tab.id);
   });
-  // In-page jump links must not change the route
+  // In-page jump links (report sections, "See the live reports") must not change the route
   document.addEventListener('click', e => {
-    const a = e.target.closest('.jump a'); if (!a) return;
+    const a = e.target.closest('.jump a, a[data-jump]'); if (!a) return;
     e.preventDefault();
     const target = document.getElementById(a.getAttribute('href').slice(1));
     if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });

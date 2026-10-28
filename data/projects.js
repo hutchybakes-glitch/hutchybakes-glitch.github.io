@@ -1,7 +1,7 @@
 /* =====================================================================================================
    PORTFOLIO CONTENT - the only file you edit to change what the site says.
-   - profile: name, greeting and contact links (a link left as "" is hidden).
-   - topics: the tiles on the portal page. A topic with a `report` is live and clickable; a topic without
+   - profile: name, pitch, greeting, contact links (a link left as "" is hidden), headline numbers and skills.
+   - topics: the report tiles on the home page. A topic with a `report` is live and clickable; a topic without
      one shows "In the works". To publish a new report, fill in `report` on its topic (copy the Rainfall one)
      and add one screenshot to images/projects/. Full field list: README.md.
    Plain JavaScript (not JSON) so the page also works when opened straight from disk. Keep the quotes and
@@ -11,13 +11,38 @@ window.PORTFOLIO = {
   profile: {
     name: "Sam Hutchinson",
     role: "Senior Analyst · Power BI",
-    greeting: "Hi, my name is Sam Hutchinson. Please click the Power BI icon to view my project portfolio.",
+    // The speech bubble beside the character at the top of the home page
+    greeting: "Hi, I'm Sam. Every report below is live: open one and try it.",
+    // The two-line pitch under the name
+    pitch: "I build Power BI reports people actually use: live data feeds that refresh themselves, models tuned until every page feels instant, and designs that explain the numbers in plain English.",
     links: {
-      linkedin: "",                          // e.g. "https://www.linkedin.com/in/your-name"
+      linkedin: "https://www.linkedin.com/in/sam-hutchinson-677826243/",
       github: "https://github.com/swhutchinson",
       email: "",                             // e.g. "you@example.com"
       cv: "",                                // e.g. "cv/Sam-Hutchinson-CV.pdf" (put the PDF in the cv folder)
     },
+    // Headline numbers across all the reports. `value: "auto-refreshes"` is counted from each report's refreshSchedule.
+    highlights: [
+      { value: "4", label: "live Power BI reports, open to anyone" },
+      { value: "auto-refreshes", label: "scheduled refreshes a day, all on their own" },
+      { value: "377", label: "documented DAX measures across the four models" },
+      { value: "67", label: "custom Deneb / Vega visuals, all generated from code" },
+    ],
+    // "What I bring": each skill backed by evidence from the reports; `topics` link to the reports that show it
+    skills: [
+      { title: "Data modelling and DAX", topics: ["population-growth", "energy"],
+        text: "Star schemas with 71–116 documented measures each. Patterns chosen for speed: a row measure plus a wrapper, results packed once and read by many measures, and ranking without RANKX over measures." },
+      { title: "Performance tuning", topics: ["population-growth", "fuel-prices", "energy"],
+        text: "Measured with DAX query traces, not guessed. 7,058 towns × 3 measures went from about 8 s to 1.0 s; a ranking from 2.5 s to 0.17 s; a map of 8,000 stations drew in less than half the time; a slow statistic moved to refresh time, 1.4 s to 0.05 s." },
+      { title: "Power Query and live APIs", topics: ["rainfall", "population-growth"],
+        text: "Cloud-refreshable M with fixed base URLs, batched calls, retries with fallbacks for flaky endpoints, paging past silent row caps, and UTC to UK time including the night the clocks change." },
+      { title: "Custom visuals with Deneb / Vega", topics: ["rainfall", "fuel-prices"],
+        text: "Maps, calendars and charts that native visuals can't draw: up to 21 Deneb visuals in a report, responsive to their container, with empty states and tooltips, all generated from code." },
+      { title: "Engineering discipline", topics: ["energy", "population-growth"],
+        text: "Power BI Projects (PBIP / TMDL) in git, pages generated from code, validated against Microsoft's schemas, and headline numbers recomputed independently in Python: 41 of 41 and 17 of 17 matched." },
+      { title: "Data pipelines and forecasting", topics: ["energy", "fuel-prices"],
+        text: "Python on GitHub Actions and scheduled tasks feeding Power BI, with no gateway anywhere: a LightGBM price forecast tested honestly on every day since January 2025, and an exact linear-programme optimiser." },
+    ],
   },
 
   topics: [
@@ -32,7 +57,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Type any North West town, village or postcode and see the rain that has fallen, the forecast hour by hour, and what is coming over the next few days, in plain English.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiN2YxZjE4MzktYjkyNC00YWFmLWIyZjUtNTI1NDg3YTcxNmZkIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
-        codeUrl: "https://github.com/swhutchinson/nw-rainfall-watch",   // the Power BI Project on GitHub
+        // codeUrl: "https://github.com/swhutchinson/nw-rainfall-watch",   // the Power BI Project on GitHub (switch on once the repo is public)
         // Scheduled refresh times (UK time) set in the Power BI Service; the page shows the last and next update
         refreshSchedule: ["00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"],
         pages: [
@@ -96,7 +121,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Every forecourt in the UK on one live map, refreshed through the day: where fuel is cheapest near any town or postcode, which brands and regions charge most, what each fuel really costs per mile for a fleet vehicle, and how prices have moved since 2003.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMTQyYjJmMTItNmNmOS00MjI5LWE3ZDItNjk2MDdlODNjZWM2IiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
-        codeUrl: "https://github.com/swhutchinson/uk-fuel-watch",   // the Power BI Project on GitHub
+        // codeUrl: "https://github.com/swhutchinson/uk-fuel-watch",   // the Power BI Project on GitHub (switch on once the repo is public)
         // Scheduled refresh times (UK time) set in the Power BI Service, about 50 minutes after each price snapshot
         refreshSchedule: ["07:30", "10:30", "13:30", "16:30", "19:30", "22:30"],
         pages: [
@@ -168,7 +193,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "Every evening, a machine-learning forecast of tomorrow's electricity prices and an exact plan for when a battery should charge and when it should use its power. Every past day is settled at the real prices, so the report shows what each way of running a battery would have earned, how long one takes to pay for itself, and how much a good forecast is worth.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMTBmN2VhODYtM2MzMC00ZGVmLTllNTEtOGU3N2QxOGE1Y2RjIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
-        codeUrl: "https://github.com/swhutchinson/gb-battery-watch",   // the Power BI Project on GitHub
+        // codeUrl: "https://github.com/swhutchinson/gb-battery-watch",   // the Power BI Project on GitHub (switch on once the repo is public)
         // Scheduled refresh times (UK time) set in the Power BI Service: GitHub often starts the 06:15 and 17:20 UTC pipeline runs hours late
         refreshSchedule: ["09:00", "13:30", "15:00", "22:00", "23:00", "23:30"],
         pages: [
@@ -234,7 +259,7 @@ window.PORTFOLIO = {
         date: "2026-10",
         summary: "How the UK's population has grown and shrunk, from the four nations down to 7,000 towns and villages: where it is growing fastest, whether births, deaths or people moving drove the change, and where official projections say it is heading, from 1851 to 2050.",
         liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiMzhlZDJmYWEtNmJkYS00NTlmLTkzYjAtYWZkMzczODFiMmQyIiwidCI6ImJjOGIzMGJkLTlkMGUtNDZmNS1hNTI4LTE0NGVjZWRiODE2NyJ9",
-        codeUrl: "https://github.com/swhutchinson/uk-population-watch",   // the Power BI Project on GitHub
+        // codeUrl: "https://github.com/swhutchinson/uk-population-watch",   // the Power BI Project on GitHub (switch on once the repo is public)
         // Scheduled refresh time (UK time) set in the Power BI Service; the data changes once a year
         refreshSchedule: ["06:00"],
         pages: [

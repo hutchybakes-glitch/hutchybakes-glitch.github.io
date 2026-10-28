@@ -21,13 +21,12 @@ CLAUDE.md                   rules for Claude Code sessions that edit this site
 ```
 
 ## How the site works
-Three screens, switched with links like `#/portfolio/rainfall`, so the browser's Back button works:
-1. **Intro (`#/`):** an illustrated character with a speech bubble (`profile.greeting`) and a Power BI icon to click.
-2. **Portal (`#/portfolio`):** one tile per topic. A topic with a `report` is live and clickable. A topic without one shows "In the works".
-3. **Report page (`#/portfolio/<topic-id>`):** preview with page tabs, the live link, what it does, real-world uses, how it is built, and the data sources.
+Two views, switched with links like `#/portfolio/rainfall`, so the browser's Back button works:
+1. **Home (`#/`):** name, role and pitch (`profile.pitch`) beside the illustrated character and speech bubble (`profile.greeting`); headline numbers (`profile.highlights`); one tile per report with two of its numbers; "Skills, with the evidence" (`profile.skills`, each linking to the reports that show it); and contact links. `#/portfolio` opens the same page scrolled to the reports.
+2. **Report page (`#/portfolio/<topic-id>`):** preview with page tabs, the live link, a "View the code" button (`codeUrl`), what it does, real-world uses, how it is built, and the data sources.
 
 ## Fill in your links (once)
-Open `data/projects.js` and fill in `profile.links`: `linkedin`, `email` and `cv`, for example `"cv/Sam-Hutchinson-CV.pdf"` once the PDF is in `cv/`. Any link left as `""` is hidden.
+Open `data/projects.js` and fill in `profile.links`: `linkedin` (done), `email` and `cv`, for example `"cv/Sam-Hutchinson-CV.pdf"` once the PDF is in `cv/`. Any link left as `""` is hidden.
 
 ## Adding a report
 1. Save a screenshot of each report page in `images/projects/` (see below).
