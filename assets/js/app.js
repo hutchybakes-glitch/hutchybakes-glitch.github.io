@@ -128,6 +128,7 @@
           </a>
           <div class="tile-preview" data-topic="${esc(t.id)}" data-i="0">
             <a href="#/portfolio/${esc(t.id)}" tabindex="-1" aria-hidden="true"><img src="${esc(thumb(r.pages[0].src))}" alt="" width="800" height="450" loading="lazy" decoding="async"></a>
+            <span class="shot-loading" role="status"><span class="spinner" aria-hidden="true"></span><span class="shot-loading-text">Loading page…</span></span>
             ${r.pages.length > 1 ? flick(r) : ''}
           </div></li>`;
       };
@@ -280,9 +281,26 @@
     const r = topics.find(t => t.id === box.dataset.topic).report;
     const n = (+box.dataset.i + dir + r.pages.length) % r.pages.length;
     box.dataset.i = n;
-    box.querySelector('img').src = thumb(r.pages[n].src);
+    const img = box.querySelector('img');
+    // Spinner on until the picture has loaded (or failed); it only appears if loading takes more than a moment
+    const done = () => { box.classList.remove('loading'); box.removeAttribute('aria-busy'); };
+    box.classList.add('loading'); box.setAttribute('aria-busy', 'true');
+    img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true });
+    img.src = thumb(r.pages[n].src);
+    if (img.complete) done();
     box.querySelector('.flick-label').textContent = `${n + 1} / ${r.pages.length} · ${r.pages[n].label}`;
+    preloadAround(box);
   };
+  // Fetch the pages either side of a tile's current one in the background, so the next click is instant
+  const preloadAround = box => {
+    const r = topics.find(t => t.id === box.dataset.topic).report, i = +box.dataset.i, L = r.pages.length;
+    [i + 1, i - 1].forEach(k => { const pre = new Image(); pre.decoding = 'async'; pre.src = thumb(r.pages[(k + L) % L].src); });
+  };
+  // Start preloading when a tile's arrows are first hovered, focused or touched
+  ['pointerover', 'focusin'].forEach(ev => document.addEventListener(ev, e => {
+    const box = e.target.closest('.tile-preview'); if (!box || box.dataset.pre) return;
+    box.dataset.pre = '1'; preloadAround(box);
+  }));
   document.addEventListener('click', e => {
     const b = e.target.closest('.flick'); if (!b) return;
     stepPages(b.closest('.tile-preview, .shot'), +b.dataset.step);

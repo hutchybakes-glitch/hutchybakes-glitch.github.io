@@ -169,10 +169,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .shot { margin: 0; aspect-ratio: 16 / 9; background: #071426; }
 /* Loading overlay for page tabs: fades in only if the picture takes more than a moment */
 .shot { position: relative; }
-.shot img { transition: opacity .2s; }
-.shot.loading img { opacity: .35; }
+.shot img, .tile-preview img { transition: opacity .2s; }
+.shot.loading img, .tile-preview.loading img { opacity: .35; }
 .shot-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem; color: #F3F2EE; font: 500 .85rem/1.4 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s .2s; pointer-events: none; }
-.shot.loading .shot-loading { opacity: 1; visibility: visible; transition: opacity .2s .25s, visibility 0s .25s; }
+.shot.loading .shot-loading, .tile-preview.loading .shot-loading { opacity: 1; visibility: visible; transition: opacity .2s .25s, visibility 0s .25s; }
 .spinner { width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 3px solid rgb(243 242 238 / .22); border-top-color: var(--brand); animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.5s; } }
