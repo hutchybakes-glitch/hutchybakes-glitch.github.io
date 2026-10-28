@@ -14,7 +14,7 @@ window.PORTFOLIO = {
     greeting: "Hi, my name is Sam Hutchinson. Please click the Power BI icon to view my project portfolio.",
     links: {
       linkedin: "",                          // e.g. "https://www.linkedin.com/in/your-name"
-      github: "https://github.com/hutchybakes-glitch",
+      github: "https://github.com/swhutchinson",
       email: "",                             // e.g. "you@example.com"
       cv: "",                                // e.g. "cv/Sam-Hutchinson-CV.pdf" (put the PDF in the cv folder)
     },

@@ -6,7 +6,7 @@ A static portfolio site for Sam Hutchinson, served by GitHub Pages from the repo
 - `data/projects.js` holds **all content**: `window.PORTFOLIO = { profile, topics }`. Each topic is a portal tile; a topic with `report` is live. It's plain JS, not JSON, so `index.html` also works from `file://`.
 - `index.html` is a shell. `assets/js/app.js` is a small hash router with three views (intro `#/`, portal `#/portfolio`, report `#/portfolio/<topic-id>`) rendered from the data. `assets/css/styles.css` holds the design tokens and components.
 - `images/projects/<id>.webp` is the screenshot for each project, a 16:9 crop of the report page, at least 900 px wide (up to 1600). Make it with `tools/crop_screenshot.py`.
-- `data/nw_place_index.csv.gz` is **read by the NW Rainfall Watch Power BI report at refresh time**, via `raw.githubusercontent.com/hutchybakes-glitch/hutchybakes-glitch.github.io/main/data/...`. Don't move, rename or delete it.
+- `data/nw_place_index.csv.gz` is **read by the NW Rainfall Watch Power BI report at refresh time**, via `raw.githubusercontent.com/swhutchinson/swhutchinson.github.io/main/data/...`. Don't move, rename or delete it.
 
 ## Adding a report (the usual task)
 1. Add `report: { ... }` to the right topic in `data/projects.js`, copying the Rainfall one, and add its screenshots. **Don't edit `index.html`, `app.js` or `styles.css` to add content.**
